@@ -22,6 +22,7 @@ import (
 	"syscall"
 	"testing"
 
+	"github.com/google/gofuzz"
 	"github.com/hashicorp/yamux"
 	"github.com/stretchr/testify/assert"
 )
@@ -175,8 +176,11 @@ func TestUnixAddrParsing(T *testing.T) {
 }
 
 func TestProxy(t *testing.T) {
+	f := fuzz.New()
 	muxSock := "/tmp/proxy-mux.sock"
+	f.Fuzz(&muxSock)
 	listenSock := "/tmp/proxy-listen.sock"
+	f.Fuzz(&listenSock)
 	testDir := "."
 	os.Remove(muxSock)
 	os.Remove(listenSock)
